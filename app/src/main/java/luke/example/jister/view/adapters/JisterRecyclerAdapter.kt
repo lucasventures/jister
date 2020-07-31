@@ -20,10 +20,10 @@ class JisterRecyclerAdapter(activityContext: ItemListActivity, var gistData : Gi
 
     init {
         onClickListener = View.OnClickListener { v ->
-            ///todo: shared preferences for device type
-                var intent = Intent(v.context, ItemDetailActivity::class.java).apply {
+                val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
                     putExtra(ItemDetailFragment.ARG_ITEM_ID, "asdf")
                 }
+
                 v.context.startActivity(intent)
             }
         }
@@ -37,6 +37,8 @@ class JisterRecyclerAdapter(activityContext: ItemListActivity, var gistData : Gi
     }
 
     override fun onBindViewHolder(holder: JisterViewHolder, position: Int) {
+        holder.parent.setOnClickListener(onClickListener)
+
         holder.name.text = gistData[position].owner.login
         holder.detail.text = gistData[position].description
         val avatarUrl  = gistData[position].owner.avatar_url

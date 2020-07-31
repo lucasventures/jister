@@ -13,10 +13,6 @@ class GistRepository : BaseRepository() {
     private val gistAPICaller: GistAPI
         get() = getRetrofitInstance()!!.create(GistAPI::class.java)
 
-    fun getGistData() {
-
-    }
-
     fun getGistData(liveData: MutableLiveData<GistDataResponseInfo>) {
         //just fetch from server until RoomDB is implemented
         gistAPICaller.getGistDataFromServer().enqueue(object : Callback<GistDataResponseInfo> {

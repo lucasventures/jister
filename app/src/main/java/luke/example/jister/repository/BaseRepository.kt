@@ -6,10 +6,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.net.ssl.HostnameVerifier
 
 abstract class BaseRepository : ViewModel() {
 
-    private val BASE_URL = "https://www.api.github.com/"
+    private val BASE_URL = "https://api.github.com/"
     private var retrofitInstance: Retrofit? = null
     private val APPLICATION_JSON = "application/json"
 
@@ -23,12 +24,16 @@ abstract class BaseRepository : ViewModel() {
             var request = it.request()
             val headerAcceptor = request.headers.newBuilder()
             headerAcceptor.add("Content-Type", APPLICATION_JSON)
-            headerAcceptor.add("API-Version", "2.0")
             request = request.newBuilder().headers(headerAcceptor.build()).build()
             it.proceed(request)
         }
 
         client.addInterceptor(headerAuthorizationInterceptor)
+
+        client.hostnameVerifier(HostnameVerifier {
+                hostname, session ->
+            true
+        })
 
         retrofitInstance = Retrofit.Builder()
             .baseUrl(getBaseURL())
