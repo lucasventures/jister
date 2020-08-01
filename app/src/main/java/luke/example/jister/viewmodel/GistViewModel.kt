@@ -4,17 +4,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import luke.example.jister.model.gist.GistDataResponseInfo
 import luke.example.jister.repository.GistRepository
+import okhttp3.ResponseBody
 
-class GistViewModel(): ViewModel() {
+class GistViewModel : ViewModel() {
     var gistData = MutableLiveData<GistDataResponseInfo>()
-    private lateinit var repository: GistRepository
+    var gistFile = MutableLiveData<ResponseBody>()
 
-    fun setRepository(repo:GistRepository){
+    //todo: Can be improved, but fine for now
+    private lateinit var repository: GistRepository
+    fun setRepository(repo: GistRepository) {
         repository = repo
     }
 
     fun getLatestGistData() {
         repository.getGistData(gistData)
+    }
+
+    fun getGistFile(fileUrl: String) {
+        repository.getGistFile(fileUrl, gistFile)
     }
 
 }

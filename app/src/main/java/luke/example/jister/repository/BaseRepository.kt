@@ -10,11 +10,19 @@ import javax.net.ssl.HostnameVerifier
 
 abstract class BaseRepository : ViewModel() {
 
-    private val BASE_URL = "https://api.github.com/"
+    private val baseUrl = "https://api.github.com/"
     private var retrofitInstance: Retrofit? = null
-    private val APPLICATION_JSON = "application/json"
+    private val appJson = "application/json"
 
     protected fun getRetrofitInstance(): Retrofit? {
+        return getRetrofitInstance(baseUrl)
+    }
+
+    protected fun getGistRetrofitInstance(fileUrl: String): Retrofit? {
+        return getRetrofitInstance(fileUrl)
+    }
+
+    private fun getRetrofitInstance(url: String): Retrofit? {
         if (retrofitInstance != null) {
             return retrofitInstance
         }
@@ -23,31 +31,27 @@ abstract class BaseRepository : ViewModel() {
         val headerAuthorizationInterceptor = Interceptor {
             var request = it.request()
             val headerAcceptor = request.headers.newBuilder()
-            headerAcceptor.add("Content-Type", APPLICATION_JSON)
+            headerAcceptor.add("Content-Type", appJson)
             request = request.newBuilder().headers(headerAcceptor.build()).build()
             it.proceed(request)
         }
 
         client.addInterceptor(headerAuthorizationInterceptor)
 
-        client.hostnameVerifier(HostnameVerifier {
-                hostname, session ->
+        client.hostnameVerifier(HostnameVerifier { hostname, session ->
             true
         })
 
         retrofitInstance = Retrofit.Builder()
-            .baseUrl(getBaseURL())
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client.build())
             .build()
         return retrofitInstance
     }
 
-    private fun getBaseURL(): String {
-        return BASE_URL
-    }
 
-    protected fun getHTTPClient(): OkHttpClient.Builder {
+    private fun getHTTPClient(): OkHttpClient.Builder {
         val interceptor = HttpLoggingInterceptor()
         interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
         return OkHttpClient.Builder()

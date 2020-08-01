@@ -1,6 +1,7 @@
 package luke.example.jister
 
 import android.app.Application
+import io.github.kbiakov.codeview.classifier.CodeProcessor
 
 class JisterApplication : Application() {
 
@@ -12,5 +13,6 @@ class JisterApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        CodeProcessor.init(this)
     }
 }

@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">jister</string>
+    <string name="app_name">Gists</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_file_viewing">ScrollingActivity</string>
+    <string name="username">\@username</string>
+    <string name="_0_files">0 files</string>
+    <string name="this_is_the_description">this is the description!</string>
+    <string name="no_description">No description available.</string>
 </resources>
